@@ -316,14 +316,22 @@ class _PerfumeDetailsPageState extends State<PerfumeDetailsPage> {
                       stream: FirebaseFirestore.instance
                           .collection('perfumes')
                           .doc(widget.perfumeId)
-                          .collection('comments')
-                          .orderBy('timestamp', descending: true)
-                          .snapshots(),
+                          .collection('comments').snapshots(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState == ConnectionState.waiting) {
                           return const Center(child: CircularProgressIndicator(color: champagne));
                         }
-                        final comments = snapshot.data?.docs ?? [];
+                        var comments = snapshot.data?.docs.toList() ?? [];
+                          comments.sort((a, b) {
+                            final aData = a.data() as Map<String, dynamic>;
+                            final bData = b.data() as Map<String, dynamic>;
+                            final aTime = aData['timestamp'];
+                            final bTime = bData['timestamp'];
+                            if (aTime == null && bTime == null) return 0;
+                            if (aTime == null) return -1;
+                            if (bTime == null) return 1;
+                            return bTime.compareTo(aTime);
+                          });
                         if (comments.isEmpty) {
                           return const Padding(
                             padding: EdgeInsets.all(30),

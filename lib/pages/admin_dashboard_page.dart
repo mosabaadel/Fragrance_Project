@@ -1059,6 +1059,7 @@ class _PerfumeFormSheetState extends State<_PerfumeFormSheet> {
       'description': _descriptionController.text.trim(),
       'imageUrl': _imageController.text.trim(),
       'imageBase64': _selectedImageBase64 ?? '',
+        'likesCount': 0,
       'updatedAt': FieldValue.serverTimestamp(),
     };
 

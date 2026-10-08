@@ -35,7 +35,6 @@ class AdminStatisticsPage extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('perfumes')
-            .orderBy('likesCount', descending: true)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -45,7 +44,14 @@ class AdminStatisticsPage extends StatelessWidget {
             return const Center(child: Text('حدث خطأ أثناء تحميل البيانات'));
           }
 
-          final perfumes = snapshot.data?.docs ?? [];
+          var perfumes = snapshot.data?.docs.toList() ?? [];
+          perfumes.sort((a, b) {
+            final aData = a.data() as Map<String, dynamic>;
+            final bData = b.data() as Map<String, dynamic>;
+            final aLikes = aData.containsKey('likesCount') ? (aData['likesCount'] as int) : 0;
+            final bLikes = bData.containsKey('likesCount') ? (bData['likesCount'] as int) : 0;
+            return bLikes.compareTo(aLikes);
+          });
           if (perfumes.isEmpty) {
             return const Center(child: Text('لا توجد عطور حالياً'));
           }
@@ -96,14 +102,22 @@ class AdminStatisticsPage extends StatelessWidget {
                         stream: FirebaseFirestore.instance
                             .collection('perfumes')
                             .doc(perfumeId)
-                            .collection('comments')
-                            .orderBy('timestamp', descending: true)
-                            .snapshots(),
+                            .collection('comments').snapshots(),
                         builder: (context, commentSnapshot) {
                           if (commentSnapshot.connectionState == ConnectionState.waiting) {
                             return const SizedBox(height: 20, child: Center(child: CircularProgressIndicator(strokeWidth: 2)));
                           }
-                          final comments = commentSnapshot.data?.docs ?? [];
+                          var comments = commentSnapshot.data?.docs.toList() ?? [];
+                          comments.sort((a, b) {
+                            final aData = a.data() as Map<String, dynamic>;
+                            final bData = b.data() as Map<String, dynamic>;
+                            final aTime = aData['timestamp'];
+                            final bTime = bData['timestamp'];
+                            if (aTime == null && bTime == null) return 0;
+                            if (aTime == null) return -1;
+                            if (bTime == null) return 1;
+                            return bTime.compareTo(aTime);
+                          });
                           if (comments.isEmpty) {
                             return const Text('لا توجد تعليقات', style: TextStyle(color: secondaryText, fontSize: 12));
                           }
