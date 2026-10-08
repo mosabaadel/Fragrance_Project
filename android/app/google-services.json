@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "248000603021",
+    "project_id": "fragrance-identity",
+    "storage_bucket": "fragrance-identity.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248000603021:android:4565d68689a266b5ec53c4",
+        "android_client_info": {
+          "package_name": "com.example.fragrance_identityy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDyH0rNMTAhR8ZKgqRs_fccAoYtCBrvHm0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
