@@ -34,7 +34,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     });
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
@@ -43,7 +43,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Account created successfully 🎉"),
+          content: Text("تم إنشاء الحساب! الرجاء التحقق من بريدك الإلكتروني لتفعيل الحساب", textDirection: TextDirection.rtl),
         ),
       );
 

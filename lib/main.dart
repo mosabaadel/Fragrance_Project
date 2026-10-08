@@ -186,6 +186,10 @@ class AuthGate extends StatelessWidget {
         }
 
         if (snapshot.hasData) {
+          if (!snapshot.data!.emailVerified && snapshot.data!.email != '17mosab69@gmail.com') {
+            FirebaseAuth.instance.signOut();
+            return const LoginPage();
+          }
           return const HomePage();
         }
 
